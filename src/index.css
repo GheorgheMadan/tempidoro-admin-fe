@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+:root {
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #343a40;
+    font-weight: 400;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(53, 53, 53);
+}
+
+li {
+    list-style: none;
+}
+
+.active {
+    background-color: #ff7f32;
+    color: white;
+    font-weight: 600;
+}
+
+header {
+    height: 60px;
+    color: white;
+    background-color: rgb(53, 53, 53);
+    padding: 7px 20px;
+}
+
+header h1 {
+    color: white;
+}
+
+.main-container {
+    display: flex;
+    height: calc(100vh - 60px);
+    /* Altezza totale meno l'header */
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+}
+
+/* SEZIONE NAVBAR */
+nav {
+    width: 15%;
+    height: calc(100vh - 80px);
+    background-color: rgba(16, 230, 27, 0.096);
+    padding: 20px 20px;
+    font-size: 18px;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-links {
+    border-left: 1.5px solid rgba(97, 97, 97, 0.733);
+}
+
+.nav-links li a {
+    padding: 5px 25px;
+    border-radius: 5px;
+    transition: 0.3s;
+    display: block;
+}
+
+.nav-links li a:hover:not(.active) {
+    background-color: rgba(80, 80, 80, 0.596);
+    color: white;
+}
