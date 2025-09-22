@@ -84,41 +84,43 @@ export default function useProducts() {
         if (filters.type) url += `&type=${filters.type}`;
 
         // categoria orologi cinturini
-        if (category === 'orologi' || category === 'outlet') {
+        if (category === 'Orologi' || category === 'Outlet') {
             if (filters.materiale_cassa) url += `&materiale_cassa=${filters.materiale_cassa}`
             if (filters.tipologia_movimento) url += `&tipologia_movimento=${filters.tipologia_movimento}`
         }
-        if (category === 'orologi' || category === 'cinturini' || category === 'outlet') {
+        if (category === 'Orologi' || category === 'Cinturini' || category === 'Outlet') {
             if (filters.materiale_cinturino) url += `&materiale_cinturino=${filters.materiale_cinturino}`
             if (filters.tipologia_cinturino) url += `&tipologia_cinturino=${filters.tipologia_cinturino}`
         }
-        if (category === 'cinturini' || category === 'outlet') {
+        if (category === 'Cinturini' || category === 'Outlet') {
             if (filters.misura_ansa) url += `&misura_ansa=${filters.misura_ansa}`
         }
         // categoria anelli, bracciali, cavigliere, ciondoli, collane, orecchini, portachiavi, preziosi, outlet
         if (
-            category === 'anelli' ||
-            category === 'bracciali' ||
-            category === 'cavigliere' ||
-            category === 'ciondoli' ||
-            category === 'collane' ||
-            category === 'orecchini' ||
-            category === 'portachiavi' ||
-            category === 'preziosi' ||
-            category === 'outlet'
+            category === 'Anelli' ||
+            category === 'Bracciali' ||
+            category === 'Cavigliere' ||
+            category === 'Ciondoli' ||
+            category === 'Collane' ||
+            category === 'Orecchini' ||
+            category === 'Portachiavi' ||
+            category === 'Preziosi' ||
+            category === 'Outlet'
         ) {
             if (filters.pietre) url += `&pietre=${filters.pietre}`
         }
 
         // categoria anelli e outlet
-        if (category === 'anelli' || category === 'outlet') {
+        if (category === 'Anelli' || category === 'Outlet') {
             if (filters.misura_anello) url += `&misura_anello=${filters.misura_anello}`
         }
 
         // categoria preziosi e outlet
-        if (category === 'preziosi' || category === 'outlet') {
+        if (category === 'Preziosi' || category === 'Outlet') {
             if (filters.modello_gioielleria) url += `&modello_gioielleria=${filters.modello_gioielleria}`
         }
+
+        if (filters.tipo_lenti) url += `&tipo_lenti=${filters.tipo_lenti}`
 
         try {
             if (append) {

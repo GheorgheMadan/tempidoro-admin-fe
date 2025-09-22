@@ -1,0 +1,440 @@
+/* =========================================================
+   Base / tema
+   - Variabili di colore, spaziature e altezze standard
+========================================================= */
+:root {
+    --txt: #2f2f2f;
+    --muted: #6f6f6f;
+    --b1: #ececec;
+    /* bordo leggero */
+    --b2: #e2e2e2;
+    /* bordo campo */
+    --b3: #d9d9d9;
+    --bg: #fff;
+    --bg-soft: #fafafa;
+    --accent: #ff8a00;
+    /* arancione brand */
+    --accent2: #ffa54d;
+    /* gradiente superiore */
+    --shadow: 0 6px 18px rgba(0, 0, 0, .05);
+    --r-lg: 12px;
+    /* card */
+    --r-sm: 8px;
+    /* campi */
+    --h-field: 42px;
+    /* altezza input standard */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.ap-form {
+    max-width: 1240px;
+    margin: 18px auto 48px;
+    padding: 0 16px;
+    color: var(--txt);
+}
+
+.form-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 4px 0 18px;
+}
+
+/* =========================================================
+   Card / griglia superiore (1 colonna come richiesto)
+========================================================= */
+.add-product-form-container {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 4px;
+    align-items: start;
+}
+
+.add-product-form-container>.ap-col {
+    background: var(--bg);
+    border: 1px solid var(--b1);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow);
+    padding: 16px 16px 8px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 2px 0 10px;
+}
+
+.right-border {
+    border-right: 0;
+    padding-right: 0;
+}
+
+/* niente “taglio” verticale */
+.m-bottom {
+    margin-bottom: 16px;
+}
+
+/* separatore decorativo */
+.add-product-form-container::after {
+    content: "";
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--b1), transparent);
+    margin: 18px 0 0;
+    grid-column: 1/-1;
+}
+
+/* =========================================================
+   Campi base
+========================================================= */
+.input-container {
+    position: relative;
+    /* serve per freccia sopra */
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+}
+
+.field-label,
+.input-container label {
+    font-weight: 650;
+    color: #3a3a3a;
+    margin-bottom: 6px;
+}
+
+.input-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-container input,
+.input-container select,
+.input-container textarea,
+.field-input {
+    width: 100%;
+    height: var(--h-field);
+    padding: 9px 38px 9px 12px;
+    /* spazio dx per X */
+    border: 1px solid var(--b2);
+    border-radius: var(--r-sm);
+    background: #fff;
+    font-size: 15px;
+    transition: border-color .14s ease, box-shadow .14s ease, background .14s ease;
+}
+
+/* numerici: evita collisione frecce native + X */
+input[type="number"] {
+    padding-right: 46px;
+}
+
+/* textarea coerente */
+.input-container textarea {
+    min-height: 108px;
+    max-height: 220px;
+    height: auto;
+    resize: vertical;
+    padding-right: 38px;
+}
+
+/* select caret cross-browser */
+.input-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image:
+        linear-gradient(45deg, transparent 50%, #b5b5b5 50%),
+        linear-gradient(135deg, #b5b5b5 50%, transparent 50%);
+    background-position: calc(100% - 16px) 55%, calc(100% - 10px) 55%;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+}
+
+/* focus brand */
+.input-container input:focus,
+.input-container select:focus,
+.input-container textarea:focus,
+.field-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 138, 0, .14);
+}
+
+/* disabled */
+input:disabled,
+select:disabled,
+textarea:disabled {
+    background: var(--bg-soft);
+    color: #9a9a9a;
+    cursor: not-allowed;
+}
+
+/* X clear */
+.delete-input-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 26px;
+    width: 26px;
+    border: none;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 13px;
+    color: #8c8c8c;
+    background: transparent;
+    cursor: pointer;
+    transition: background .12s ease, color .12s ease, transform .06s ease;
+}
+
+.input-container textarea+.delete-input-icon {
+    top: 14px;
+    transform: none;
+}
+
+.delete-input-icon:hover {
+    background: #f0f0f0;
+    color: var(--accent);
+}
+
+.delete-input-icon:active {
+    transform: translateY(-50%) scale(.96);
+}
+
+.right-22px {
+    right: 10px !important;
+}
+
+/* =========================================================
+   Layout “no buchi” (auto-fit)
+========================================================= */
+.row-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    /* riempie la riga */
+    gap: 14px;
+    align-items: start;
+}
+
+.row-container2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.row-container3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.ap-hint {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 12.5px;
+}
+
+/* =========================================================
+   Dropdown
+========================================================= */
+.dropdown-container {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--b1);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    max-height: 280px;
+    overflow: auto;
+    z-index: 15;
+    padding: 6px;
+}
+
+.dropdown-container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-container li {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .14s ease, transform .06s ease;
+}
+
+.dropdown-container li:hover {
+    background: rgba(255, 138, 0, .10);
+}
+
+/* =========================================================
+   FRECCIA “SOPRA” + wrapper dedicato
+   - Metti classi sul wrapper del campo dropdown:
+     .input-container.has-above-toggle   -> crea spazio sopra
+     .input-container.is-open            -> ruota freccia
+   - Sull’icona: className="arrow-icon arrow--above"
+========================================================= */
+
+/* spazio per l’icona SOLO sui campi con dropdown */
+.input-btn-container {
+    display: flex;
+    position: absolute;
+    align-self: center;
+    height: 100%;
+    right: 8px;
+    gap: 7px;
+    top: 20%;
+}
+
+.delete-input-icon1 {
+    height: 26px;
+    width: 26px;
+    border: none;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 13px;
+    color: #8c8c8c;
+    background: transparent;
+    cursor: pointer;
+    transition: background .12s ease, color .12s ease, transform .06s ease;
+}
+
+
+.delete-input-icon1:hover {
+    background: #f0f0f0;
+    color: var(--accent);
+}
+
+.delete-input-icon1:active {
+    transform: translateY(-50%) scale(.96);
+}
+
+
+/* stile base icona */
+.arrow-icon {
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    transition: transform .18s ease, color .18s ease, opacity .18s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   Radio compatti & puliti
+========================================================= */
+.checkbox-label {
+    color: #3b3b3b;
+    font-weight: 650;
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+.ap-radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, auto));
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--b1);
+    background: #fff;
+    border-radius: 10px;
+}
+
+.ap-radio-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border: 1px solid var(--b1);
+    border-radius: 999px;
+    background: #fafafa;
+    transition: background .12s ease, border-color .12s ease;
+}
+
+.ap-radio-option:hover {
+    background: #f3f3f3;
+}
+
+.ap-radio-option input[type="radio"] {
+    width: 16px;
+    height: 16px;
+}
+
+/* =========================================================
+   Bottoni
+========================================================= */
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    justify-content: center;
+    padding-bottom: 40px;
+}
+
+.btn {
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: filter .14s ease, transform .06s ease, box-shadow .14s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, var(--accent2), var(--accent));
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(255, 138, 0, .20);
+}
+
+.btn-primary:hover {
+    filter: brightness(.98);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:disabled {
+    background: #ececec;
+    color: #a6a6a6;
+    border-color: #ececec;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* =========================================================
+   Responsività
+========================================================= */
+@media (max-width:1100px) {
+    .add-product-form-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width:820px) {
+    .row-container3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width:560px) {
+    .row-container3 {
+        grid-template-columns: 1fr;
+    }
+
+    .ap-form {
+        padding: 0 12px;
+    }
+}

@@ -111,13 +111,13 @@ export default function HomePage() {
     return (
         <main className="category-page">
             <div className='container-title'>
-                <h1 className="text-center">{deslugyfyCategory(category)}</h1>
+                <h1 className="text-center">{category}</h1>
                 {/* Sezione ricerca */}
                 <div>
                     <label>Seleziona la categoria: </label>
                     <select onChange={e => setCategory(e.target.value)} className='input'>
                         <option value="">-- seleziona --</option>
-                        {categoriesList.map((c) => <option key={c.id} value={c.category_name}>{deslugyfyCategory(c.category_name)}</option>)}
+                        {categoriesList.map((c) => <option key={c.id} value={c.category_name}>{c.category_name}</option>)}
                     </select>
                 </div>
             </div>

@@ -48,8 +48,7 @@ header h1 {
 
 .main-container {
     display: flex;
-    height: calc(100vh - 60px);
-    /* Altezza totale meno l'header */
+    min-height: calc(100vh - 60px);
 }
 
 main {
@@ -60,7 +59,6 @@ main {
 /* SEZIONE NAVBAR */
 nav {
     width: 15%;
-    height: calc(100vh - 80px);
     background-color: rgba(16, 230, 27, 0.096);
     padding: 20px 20px;
     font-size: 18px;

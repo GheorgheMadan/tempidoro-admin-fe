@@ -4,12 +4,12 @@ export default function useFilterCategoryList() {
 
     const [categoryFilterList, setCategoryFilterList] = useState([])
     const [categoriesList, setCategoriesList] = useState([])
-    const [table, setTable] = useState([])
+    const [table, setTable] = useState({})
 
 
     async function getCategoryFilterList(category) {
         try {
-            const res = await fetch(`http://localhost:3000/api/category-filters/${category.toLowerCase()}`)
+            const res = await fetch(`http://localhost:3000/api/category-filters/${category}`)
             if (!res.ok) throw new Error("Nessuna lista trovata")
             const data = await res.json()
             setCategoryFilterList(data)
@@ -37,7 +37,7 @@ export default function useFilterCategoryList() {
             const res = await fetch(`http://localhost:3000/api/category-filters/table/${table.toLowerCase()}`)
             if (!res.ok) throw new Error("Nessuna lista trovata")
             const data = await res.json()
-            setTable(data.results)
+            setTable(data)
         } catch (err) {
             console.error(err);
         }
