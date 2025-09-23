@@ -212,6 +212,11 @@ export default function useProducts() {
         setFilters(prev => ({ ...prev, [name]: value }));
     }
 
+    async function addProduct(productToAdd) {
+
+
+    }
+
     return {
         products,
         setProducts,

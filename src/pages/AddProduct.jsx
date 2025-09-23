@@ -3,8 +3,14 @@ import { useGlobalProducts } from "../context/GlobalProducts";
 import InputProductDetail from "../components/InputProductDetail";
 import "../css/addProductStyle.css";
 import useUtility from "../hooks/useUtility";
+import { CiWarning } from "react-icons/ci";
+import ConfirmModal from "../components/ConfirmModal";
+import AllertModal from "../components/AllertModal";
 
 export default function AddProduct() {
+
+    const [openModal, setOpenModal] = useState(false)
+    const [allertModal, setAllertModal] = useState(false)
     const {
         categoriesList,
         getCategoryFilterList,
@@ -23,11 +29,11 @@ export default function AddProduct() {
         brand: "", // fatto
         title: "", // fatto
         codice: "", // fatto
-        price: 0, // fatto
-        discount: 0, // fatto
+        price: "", // fatto
+        discount: "", // fatto
         description: "", // fatto
         available: true, // fatto
-        stock: 0, // fatto
+        stock: "", // fatto
         in_promozione: false, // fatto
         in_evidenza: true, // fatto
         novita: true, // fatto
@@ -60,15 +66,25 @@ export default function AddProduct() {
         misura_anello: "",
     });
 
+    // stato per segnare quali campi sono stati "toccati"
+    const [touched, setTouched] = useState({});
+
+    // funzione helper → quando un campo perde il focus, lo segno come toccato
+    const markTouched = (field) => {
+        setTouched((prev) => ({ ...prev, [field]: true }));
+    };
+
+    // funzione helper → mostra errore SOLO se il campo è stato toccato e ha un errore
+    const showError = (field) => touched[field] && errors[field];
+
+
     // carico una volta i brand
     useEffect(() => {
         getTableData("brands");
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         productToAdd.categoria && getCategoryFilterList(productToAdd.categoria);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productToAdd.categoria]);
 
     // apro il menu e carico i dati dal be in base alla tabella e al campo cliccato
@@ -102,9 +118,6 @@ export default function AddProduct() {
     // --- HANDLER BASE ---
     const handleImageChange = (e) => {
         if (!productToAdd.title?.trim()) {
-            alert(
-                "Inserisci prima il Nome prodotto: senza titolo il nome immagine sarà generico."
-            );
             return;
         }
         const file = e.target.files?.[0];
@@ -116,9 +129,59 @@ export default function AddProduct() {
             ...prev,
             image: computedName,
         }));
-
-        console.log("Nome immagine calcolato:", computedName);
     };
+
+    // costante contenete simboli
+    const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~"
+    // verifico se ci sono caratteri speciali nel nome 
+    const isIncludes = symbols.split('').some(symbol => productToAdd.title.includes(symbol))
+
+    // errors con useMemo → si aggiorna solo quando cambia productToAdd
+    const errors = useMemo(() => {
+        const e = {};
+
+        // se manca la categoria
+        if (!productToAdd.categoria.trim()) e.categoria = "Inserisci la categoria!";
+
+        // se manca il titolo
+        if (!productToAdd.title.trim()) e.title = "Nome prodotto obbligatorio";
+        if (isIncludes) e.title = "Il nome prodotto non può contenere simboli o caratteri speciali"
+
+        // se manca il brand
+        if (!productToAdd.brand.trim()) e.brand = "Seleziona un Brand altrimenti verrà segnato 'senza marca'";
+
+        // validazione prezzo
+        const price = Number(productToAdd.price);
+        if (!price) {
+            e.price = "Il prezzo è obbligatorio"
+        } else if (isNaN(price)) {
+            e.price = "Il prezzo deve contenere solo numeri";
+        } else if (price <= 0) {
+            e.price = "Il prezzo non può essere minore o uguale a 0";
+        }
+
+        const stock = Number(productToAdd.stock)
+        if (isNaN(stock)) {
+            e.stock = "Lo stock deve contenere solo numeri"
+        } else if (stock < 0) {
+            e.stock = "Lo stock non può essere negativo"
+        }
+
+        const discount = Number(productToAdd.discount)
+        if (isNaN(discount)) {
+            e.discount = "Lo sconto deve contenere solo numeri"
+        } else if (discount < 0) {
+            e.discount = "Lo sconto non può essere negativo"
+        }
+
+        const codiceEean = Number(productToAdd.codice_ean)
+        if (isNaN(codiceEean)) e.codice_ean = "Il codice EAN deve contenere solo numeri"
+        if (productToAdd.codice_ean.length < 8 || productToAdd.codice_ean.length > 13) e.codice_ean = "Il codice EAN non valido"
+
+        if (!productToAdd.image) e.image = "Immagine obbligatoria"
+
+        return e;
+    }, [productToAdd]);
 
     return (
         <>
@@ -142,6 +205,7 @@ export default function AddProduct() {
                                             categoria: e.target.value,
                                         })
                                     }
+                                    onBlur={() => markTouched("categoria")} // segno che è stato toccato
                                 >
                                     <option value="">-- seleziona una categoria --</option>
                                     {categoriesList.map((category, i) => (
@@ -151,6 +215,7 @@ export default function AddProduct() {
                                     ))}
                                 </select>
                             </div>
+                            {showError("categoria") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.categoria}</p>)}
                         </div>
 
                         {/* nome prodotto */}
@@ -164,6 +229,7 @@ export default function AddProduct() {
                                     onChange={(e) =>
                                         setProductToAdd({ ...productToAdd, title: e.target.value })
                                     }
+                                    onBlur={() => markTouched("title")} // segno che è stato toccato
                                 />
                                 <button
                                     type="button"
@@ -177,6 +243,7 @@ export default function AddProduct() {
                                     ✕
                                 </button>
                             </div>
+                            {showError("title") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.title}</p>)}
                         </div>
 
                         {/* brand con dropdown */}
@@ -201,6 +268,8 @@ export default function AddProduct() {
                             deleteInput={() =>
                                 setProductToAdd({ ...productToAdd, brand: "" })
                             }
+                            markInput={() => markTouched("brand")}
+                            err={showError("brand") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.brand}</p>)}
                         />
 
                         {/* description */}
@@ -244,21 +313,20 @@ export default function AddProduct() {
                                 <div className="input-icon-container">
                                     <input
                                         className="field-input"
-                                        type="number"
+                                        type="text"
                                         value={productToAdd.price}
                                         onChange={(e) =>
                                             setProductToAdd({
                                                 ...productToAdd,
-                                                price: parseFloat(e.target.value || 0),
+                                                price: e.target.value,
                                             })
                                         }
-                                        min="0"
-                                        step="1"
+                                        onBlur={() => markTouched("price")} // segno che è stato toccato
                                     />
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            setProductToAdd({ ...productToAdd, price: 0 })
+                                            setProductToAdd({ ...productToAdd, price: "" })
                                         }
                                         className="delete-input-icon right-22px"
                                         aria-label="Azzera prezzo"
@@ -267,6 +335,7 @@ export default function AddProduct() {
                                         ✕
                                     </button>
                                 </div>
+                                {showError("price") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.price}</p>)}
                             </div>
 
                             {/* Discount */}
@@ -275,21 +344,20 @@ export default function AddProduct() {
                                 <div className="input-icon-container">
                                     <input
                                         className="field-input"
-                                        type="number"
+                                        type="text"
                                         value={productToAdd.discount}
                                         onChange={(e) =>
                                             setProductToAdd({
                                                 ...productToAdd,
-                                                discount: parseFloat(e.target.value || 0),
+                                                discount: e.target.value,
                                             })
                                         }
-                                        min="0"
-                                        step="1"
+                                        onBlur={() => markTouched("discount")} // segno che è stato toccato
                                     />
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            setProductToAdd({ ...productToAdd, discount: 0 })
+                                            setProductToAdd({ ...productToAdd, discount: "" })
                                         }
                                         className="delete-input-icon right-22px"
                                         aria-label="Azzera sconto"
@@ -298,6 +366,7 @@ export default function AddProduct() {
                                         ✕
                                     </button>
                                 </div>
+                                {showError("discount") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.discount}</p>)}
                             </div>
 
                             {/* Stock */}
@@ -306,21 +375,20 @@ export default function AddProduct() {
                                 <div className="input-icon-container">
                                     <input
                                         className="field-input"
-                                        type="number"
+                                        type="text"
                                         value={productToAdd.stock}
                                         onChange={(e) =>
                                             setProductToAdd({
                                                 ...productToAdd,
-                                                stock: parseFloat(e.target.value || 0),
+                                                stock: e.target.value,
                                             })
                                         }
-                                        min="0"
-                                        step="1"
+                                        onBlur={() => markTouched("stock")} // segno che è stato toccato
                                     />
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            setProductToAdd({ ...productToAdd, stock: 0 })
+                                            setProductToAdd({ ...productToAdd, stock: "" })
                                         }
                                         className="delete-input-icon right-22px"
                                         aria-label="Azzera stock"
@@ -329,6 +397,7 @@ export default function AddProduct() {
                                         ✕
                                     </button>
                                 </div>
+                                {showError("stock") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.stock}</p>)}
                             </div>
                         </div>
 
@@ -531,6 +600,7 @@ export default function AddProduct() {
                                                     codice_ean: e.target.value,
                                                 })
                                             }
+                                            onBlur={() => markTouched("codice_ean")} // segno che è stato toccato
                                         />
                                         <button
                                             type="button"
@@ -544,7 +614,9 @@ export default function AddProduct() {
                                             ✕
                                         </button>
                                     </div>
+                                    {showError("codice_ean") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.codice_ean}</p>)}
                                 </div>
+
                             </div>
 
                             {/* CODICE PRODUTTORE */}
@@ -800,6 +872,7 @@ export default function AddProduct() {
                                 accept=".jpg,.jpeg,.png,.webp,.avif"
                                 onChange={handleImageChange}
                                 disabled={!productToAdd.title.trim()}
+                                onBlur={() => markTouched("image")} // segno che è stato toccato
                             />
                             <button
                                 type="button"
@@ -816,6 +889,7 @@ export default function AddProduct() {
                                 Inserisci il Nome prodotto per abilitare il caricamento immagine.
                             </small>
                         )}
+                        {showError("image") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.image}</p>)}
                     </div>
                 </div>
 
@@ -1130,10 +1204,27 @@ export default function AddProduct() {
                         disabled={!productToAdd.categoria}
                         className="btn btn-primary"
                         title={!productToAdd.categoria ? "Seleziona una categoria" : ""}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setOpenModal(true)
+                        }}
                     >
                         Aggiungi prodotto
                     </button>
                 </div>
+                <ConfirmModal
+                    show={openModal}
+                    onClose={() => setOpenModal(false)}
+                    onConfirm={() => {
+                        setOpenModal(false)
+                        setAllertModal(true)
+                    }}
+                    modalTitle="Confermi l'aggiunta del prodotto?"
+                />
+                <AllertModal
+                    show={allertModal}
+                    onConfirm={() => setAllertModal(false)}
+                />
             </form>
         </>
     );

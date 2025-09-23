@@ -1,0 +1,85 @@
+/* sfondo scuro che copre tutta la finestra */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    /* semi trasparente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    /* sopra tutto */
+}
+
+/* box della modal */
+.modal {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+/* titolo */
+.modal h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* contenitore bottoni */
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* bottone base */
+.modal-actions .btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+/* bottone annulla */
+.modal-actions .btn.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.modal-actions .btn.btn-secondary:hover {
+    background: #d6d6d6;
+}
+
+/* bottone conferma */
+.modal-actions .btn.btn-primary {
+    background: #007bff;
+    color: #fff;
+}
+
+.modal-actions .btn.btn-primary:hover {
+    background: #0069d9;
+}
+
+/* animazione entrata */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
