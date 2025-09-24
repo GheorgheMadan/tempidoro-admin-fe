@@ -1,8 +1,7 @@
-import React from "react";
 import ReactDOM from "react-dom";
 import "../css/ModalStyle.css"
 
-export default function AllertModal({ show, onClose, onConfirm }) {
+export default function AllertModal({ show, onConfirm }) {
     // se show è false → non mostrare nulla
     if (!show) return null;
 
