@@ -1,21 +1,38 @@
-import ReactDOM from "react-dom";
-import "../css/ModalStyle.css"
+import { useGlobalProducts } from "../context/GlobalProducts";
+import Spinner from "./Spinner";
 
-export default function AllertModal({ show, onConfirm }) {
-    // se show è false → non mostrare nulla
+export default function AllertModal({ show, onConfirm, text, errors = [] }) {
     if (!show) return null;
 
-    return ReactDOM.createPortal(
+    const { loading } = useGlobalProducts()
+
+    const hasErrors = Array.isArray(errors) && errors.length > 0;
+
+    return (
         <div className="modal-overlay">
+
             <div className="modal">
-                <h2>Operazione andata a buon fine!</h2>
+                {loading && <Spinner />}
+                {!loading && <div>
+
+                    <h2>{hasErrors ? "Correggi i seguenti errori: " : "Info"}</h2>
+
+                    {hasErrors ? (
+                        <ul className="error-list">
+                            {errors.map((err, idx) => (
+                                <li key={idx}>{err}</li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>{text}</p>
+                    )}</div>
+                }
                 <div className="modal-actions">
                     <button className="btn btn-primary" onClick={onConfirm}>
-                        Ok
+                        Chiudi
                     </button>
                 </div>
             </div>
-        </div>,
-        document.body
+        </div>
     );
 }

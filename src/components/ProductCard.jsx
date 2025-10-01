@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { memo } from "react";
 import AddToFavButton from "./AddToFavButton";
 import '../css/ProductsStyle.css'
+import { useGlobalProducts } from "../context/GlobalProducts";
 
 // Funzione per trasformare un titolo in uno slug leggibile
 function slugify(title) {
@@ -13,6 +14,8 @@ function slugify(title) {
 }
 
 export default memo(function ProductCard({ product }) {
+
+    const { copyProduct, copiedProduct } = useGlobalProducts()
 
     // calocolo prezzo scontato 
     const discount = `0.${product.discount}`
@@ -58,7 +61,8 @@ export default memo(function ProductCard({ product }) {
                 </div>
                 {product?.available || product?.stock > 0 && <p className="out-of-stock">Prodotto non disponibile</p>}
                 <div className="container-button">
-                    <button className="btn-skin-1 btn-xs">MODIFICA</button>
+                    <Link className="btn-skin-1-btn-xs" to={`/product/edit/${product.id}`}>MODIFICA</Link>
+                    <button className="btn-skin-1-btn-xs" onClick={() => copyProduct(product)}>{copiedProduct && copiedProduct.codice === product.codice ? "Prodotto copiato" : "Copia"}</button>
                 </div>
             </div>
             {product.novita && <span className="news">NOVITÀ</span>}

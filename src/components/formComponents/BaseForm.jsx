@@ -2,7 +2,8 @@ import { CiWarning } from "react-icons/ci";
 import "../../css/addProductStyle.css";
 import InputProductDetail from "../InputProductDetail";
 
-export default function BaseForm({ productToAdd, setProductToAdd, markTouched, categoriesList, errors, showError, isOpen, handleOpen, handleToggle, table, filteredDataTable, setOpenMenu }) {
+export default function BaseForm({ productToAdd, setProductToAdd, markTouched, categoriesList, errors, showError,
+    isOpen, handleOpen, handleToggle, table, filteredDataTable, setOpenMenu, mode }) {
     return (
         <>
             <div className="ap-col right-border m-bottom">
@@ -10,28 +11,38 @@ export default function BaseForm({ productToAdd, setProductToAdd, markTouched, c
 
                 {/* categoria */}
                 <div className="input-container">
-                    <label className="field-label">Scegli la categoria</label>
-                    <div className="input-icon-container">
-                        <select
-                            className="field-input"
-                            value={productToAdd.categoria}
-                            onChange={(e) =>
-                                setProductToAdd({
-                                    ...productToAdd,
-                                    categoria: e.target.value,
-                                })
-                            }
-                            onBlur={() => markTouched("categoria")} // segno che è stato toccato
-                        >
-                            <option value="">-- seleziona una categoria --</option>
-                            {categoriesList.map((category, i) => (
-                                <option key={i} value={category.category_name}>
-                                    {category.category_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    {showError("categoria") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.categoria}</p>)}
+                    {mode !== 'Edit' ?
+                        <>
+                            <label className="field-label">Scegli la categoria</label>
+                            <div className="input-icon-container">
+                                <select
+                                    className="field-input"
+                                    value={productToAdd?.categoria}
+                                    onChange={(e) =>
+                                        setProductToAdd({
+                                            ...productToAdd,
+                                            categoria: e.target.value,
+                                        })
+                                    }
+                                    onBlur={() => markTouched("categoria")} // segno che è stato toccato
+                                >
+                                    <option value="">-- seleziona una categoria --</option>
+                                    {categoriesList?.map((category, i) => (
+                                        <option key={i} value={category.category_name}>
+                                            {category.category_name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            {showError("categoria") && (<p className="form-error"><CiWarning className="err-icon" /> {errors.categoria}</p>)}
+                        </>
+                        :
+                        <>
+                            <span>Categoria: </span>
+                            <h3>{productToAdd?.categoria}</h3>
+                        </>
+                    }
+
                 </div>
 
                 {/* nome prodotto */}
@@ -41,7 +52,7 @@ export default function BaseForm({ productToAdd, setProductToAdd, markTouched, c
                         <input
                             className="field-input"
                             type="text"
-                            value={productToAdd.title}
+                            value={productToAdd?.title}
                             onChange={(e) =>
                                 setProductToAdd({ ...productToAdd, title: e.target.value })
                             }
@@ -77,7 +88,7 @@ export default function BaseForm({ productToAdd, setProductToAdd, markTouched, c
                     changeInput={(e) =>
                         setProductToAdd({ ...productToAdd, brand: e.target.value })
                     }
-                    inputValue={productToAdd.brand}
+                    inputValue={productToAdd?.brand}
                     handleClick={(item) =>
                         setProductToAdd({ ...productToAdd, brand: item.name })
                     }
@@ -95,7 +106,7 @@ export default function BaseForm({ productToAdd, setProductToAdd, markTouched, c
                         <textarea
                             className="field-input"
                             name="description"
-                            value={productToAdd.description}
+                            value={productToAdd?.description}
                             onChange={(e) =>
                                 setProductToAdd({
                                     ...productToAdd,

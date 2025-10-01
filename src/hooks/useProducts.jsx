@@ -23,6 +23,8 @@ export default function useProducts() {
     const [loadingMore, setLoadingMore] = useState(false);
     const [searching, setSearching] = useState(false);
 
+    const [response, setResponse] = useState(null)
+
     // stato filtri 
     const [filters, setFilters] = useState({
         order: '',
@@ -212,10 +214,66 @@ export default function useProducts() {
         setFilters(prev => ({ ...prev, [name]: value }));
     }
 
+
     async function addProduct(productToAdd) {
-
-
+        try {
+            setLoading(true)
+            const res = await fetch(`http://localhost:3000/api/products/addProduct`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(productToAdd),
+            })
+            const message = await res.json()
+            setResponse(message)
+        } catch (err) {
+            console.error(err);
+            setResponse({
+                success: false,
+                message: "Impossibile contattare il server, riprova più tardi.",
+            });
+        } finally {
+            setLoading(false);
+        }
     }
+
+    async function modifyProduct(id, modifiedProduct) {
+        try {
+            setLoading(true);
+            const res = await fetch(`http://localhost:3000/api/products/modifyProduct/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(modifiedProduct),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                // server error/404/validazione: data = { message, modifiedProduct: null, errors? }
+                setResponse({
+                    message: data?.message || "Errore durante l'aggiornamento",
+                    modifiedProduct: null,
+                    errors: data?.errors || undefined,
+                });
+                return null;
+            }
+
+            // successo: data = { message, modifiedProduct }
+            setResponse(data);
+            return data; // così puoi usarlo per aggiornare la UI locale
+        } catch (err) {
+            console.error(err);
+            setResponse({
+                message: "Impossibile contattare il server, riprova più tardi.",
+                modifiedProduct: null,
+            });
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }
+
 
     return {
         products,
@@ -236,5 +294,9 @@ export default function useProducts() {
         setFilters,
         resetAll,
         handleFilter,
+        response,
+        setResponse,
+        addProduct,
+        modifyProduct
     };
 }

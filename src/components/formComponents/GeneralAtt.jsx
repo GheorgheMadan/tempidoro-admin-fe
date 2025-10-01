@@ -20,7 +20,7 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
                     changeInput={(e) =>
                         setProductToAdd({ ...productToAdd, genere: e.target.value })
                     }
-                    inputValue={productToAdd.genere}
+                    inputValue={productToAdd?.genere}
                     handleClick={(item) =>
                         setProductToAdd({ ...productToAdd, genere: item.name })
                     }
@@ -43,7 +43,7 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
                     changeInput={(e) =>
                         setProductToAdd({ ...productToAdd, tipologia: e.target.value })
                     }
-                    inputValue={productToAdd.tipologia}
+                    inputValue={productToAdd?.tipologia}
                     handleClick={(item) =>
                         setProductToAdd({ ...productToAdd, tipologia: item.name })
                     }
@@ -66,7 +66,7 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
                     changeInput={(e) =>
                         setProductToAdd({ ...productToAdd, collezione: e.target.value })
                     }
-                    inputValue={productToAdd.collezione}
+                    inputValue={productToAdd?.collezione}
                     handleClick={(item) =>
                         setProductToAdd({ ...productToAdd, collezione: item.name })
                     }
@@ -92,7 +92,7 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
                     changeInput={(e) =>
                         setProductToAdd({ ...productToAdd, materiale: e.target.value })
                     }
-                    inputValue={productToAdd.materiale}
+                    inputValue={productToAdd?.materiale}
                     handleClick={(item) =>
                         setProductToAdd({ ...productToAdd, materiale: item.name })
                     }
@@ -115,7 +115,7 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
                     changeInput={(e) =>
                         setProductToAdd({ ...productToAdd, colore: e.target.value })
                     }
-                    inputValue={productToAdd.colore}
+                    inputValue={productToAdd?.colore}
                     handleClick={(item) =>
                         setProductToAdd({ ...productToAdd, colore: item.name })
                     }
@@ -138,7 +138,7 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
                     changeInput={(e) =>
                         setProductToAdd({ ...productToAdd, finitura: e.target.value })
                     }
-                    inputValue={productToAdd.finitura}
+                    inputValue={productToAdd?.finitura}
                     handleClick={(item) =>
                         setProductToAdd({ ...productToAdd, finitura: item.name })
                     }
@@ -152,13 +152,14 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
             <div className="input-container m-bottom">
                 <label className="field-label">Immagine</label>
                 <div className="input-icon-container">
+                    <div><img src={`/prodotti/${productToAdd.image}`} alt={productToAdd.title} className="img-form" /></div>
                     <input
                         className="field-input width-100"
                         type="file"
                         name="image"
                         accept=".jpg,.jpeg,.png,.webp,.avif"
                         onChange={handleImageChange}
-                        disabled={!productToAdd.title.trim()}
+                        disabled={!productToAdd?.title.trim()}
                         onBlur={() => markTouched("image")} // segno che è stato toccato
                     />
                     <button
@@ -171,7 +172,7 @@ export default function GeneralAtt({ productToAdd, setProductToAdd, markTouched,
                         ✕
                     </button>
                 </div>
-                {!productToAdd.title.trim() && (
+                {!productToAdd?.title.trim() && (
                     <small className="ap-hint">
                         Inserisci il Nome prodotto per abilitare il caricamento immagine.
                     </small>

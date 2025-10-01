@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import ProductCard from '../components/ProductCard';
 import { useGlobalProducts } from '../context/GlobalProducts';
-import { useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { debounce } from 'lodash';
 import { MdFilterList } from "react-icons/md";
@@ -11,7 +10,7 @@ import ActiveFilters from '../components/ActiveFilters';
 
 export default function HomePage() {
 
-    const { products, total, offset, limit, fetchProducts, loading, deslugyfyCategory,
+    const { products, total, offset, limit, fetchProducts, loading,
         loadingMore, searching, setOffset, filters, setFilters, resetAll, handleFilter,
         getCategoryFilterList, categoryFilterList, categoriesList } = useGlobalProducts();
 
@@ -22,7 +21,14 @@ export default function HomePage() {
     // stato value del input utilizzato per svuotare il valore
     const [searchInput, setSearchInput] = useState("")
 
-    const [category, setCategory] = useState('')
+    const [category, setCategory] = useState(() => {
+        const storedCategory = sessionStorage.getItem('categoria');
+        return storedCategory ? storedCategory : '';
+    })
+
+    useEffect(() => {
+        sessionStorage.setItem('categoria', category);
+    }, [category]);
 
     // debounce per evitare chiamate API troppo frequenti
     const debouncedSearch = useCallback(
@@ -115,7 +121,7 @@ export default function HomePage() {
                 {/* Sezione ricerca */}
                 <div>
                     <label>Seleziona la categoria: </label>
-                    <select onChange={e => setCategory(e.target.value)} className='input'>
+                    <select onChange={e => setCategory(e.target.value)} className='input' value={category}>
                         <option value="">-- seleziona --</option>
                         {categoriesList.map((c) => <option key={c.id} value={c.category_name}>{c.category_name}</option>)}
                     </select>
@@ -180,7 +186,10 @@ export default function HomePage() {
             <div className="container-products">
                 {
                     products.map(product => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                        />
                     ))}
             </div>
 

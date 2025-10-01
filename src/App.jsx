@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage"
 import NotFoundPage from "./pages/NotFoundPage"
 import AddProduct from "./pages/AddProduct"
 import ProductDetail from "./pages/ProductDetail"
+import EditProduct from "./pages/EditProduct"
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/product/:slugAndId" element={<ProductDetail />} />
+            <Route path="/product/edit/:id" element={<EditProduct />} />
             {/* <Route path="/oreficeria" element={<OreficeriaPage />} />
             <Route path="/contatti" element={<ContattiPage />} />
             <Route path="/shop-online" element={<ShopOnlinePage />} />

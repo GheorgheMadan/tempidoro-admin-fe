@@ -15,7 +15,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                         <input
                             className="field-input"
                             type="text"
-                            value={productToAdd.price}
+                            value={productToAdd?.price}
                             onChange={(e) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -46,7 +46,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                         <input
                             className="field-input"
                             type="text"
-                            value={productToAdd.discount}
+                            value={productToAdd?.discount}
                             onChange={(e) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -77,7 +77,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                         <input
                             className="field-input"
                             type="text"
-                            value={productToAdd.stock}
+                            value={productToAdd?.stock}
                             onChange={(e) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -112,7 +112,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="disponibile"
                                 value="true"
-                                checked={productToAdd.available === true}
+                                checked={productToAdd?.available === true}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -128,7 +128,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="disponibile"
                                 value="false"
-                                checked={productToAdd.available === false}
+                                checked={productToAdd?.available === false}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -149,7 +149,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="novita"
                                 value="true"
-                                checked={productToAdd.novita === true}
+                                checked={productToAdd?.novita === true}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -165,7 +165,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="novita"
                                 value="false"
-                                checked={productToAdd.novita === false}
+                                checked={productToAdd?.novita === false}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -186,7 +186,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="in_promozione"
                                 value="true"
-                                checked={productToAdd.in_promozione === true}
+                                checked={productToAdd?.in_promozione === true}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -202,7 +202,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="in_promozione"
                                 value="false"
-                                checked={productToAdd.in_promozione === false}
+                                checked={productToAdd?.in_promozione === false}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -223,7 +223,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="in_evidenza"
                                 value="true"
-                                checked={productToAdd.in_evidenza === true}
+                                checked={productToAdd?.in_evidenza === true}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -239,7 +239,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 type="radio"
                                 name="in_evidenza"
                                 value="false"
-                                checked={productToAdd.in_evidenza === false}
+                                checked={productToAdd?.in_evidenza === false}
                                 onChange={(e) =>
                                     setProductToAdd((p) => ({
                                         ...p,
@@ -264,7 +264,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 className="field-input"
                                 type="text"
                                 name="codice"
-                                value={productToAdd.codice}
+                                value={productToAdd?.codice}
                                 onChange={(e) =>
                                     setProductToAdd({
                                         ...productToAdd,
@@ -294,7 +294,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                                 className="field-input"
                                 type="text"
                                 name="codice_ean"
-                                value={productToAdd.codice_ean}
+                                value={productToAdd?.codice_ean}
                                 onChange={(e) =>
                                     setProductToAdd({
                                         ...productToAdd,
@@ -328,7 +328,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                             className="field-input width-100"
                             type="text"
                             name="codice_produttore"
-                            value={productToAdd.codice_produttore}
+                            value={productToAdd?.codice_produttore}
                             onChange={(e) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -361,7 +361,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                             className="field-input width-100"
                             type="text"
                             name="confezione"
-                            value={productToAdd.confezione}
+                            value={productToAdd?.confezione}
                             onChange={(e) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -391,7 +391,7 @@ export default function LogisticForm({ productToAdd, setProductToAdd, markTouche
                             className="field-input width-100"
                             type="text"
                             name="garanzia"
-                            value={productToAdd.garanzia}
+                            value={productToAdd?.garanzia}
                             onChange={(e) =>
                                 setProductToAdd({
                                     ...productToAdd,

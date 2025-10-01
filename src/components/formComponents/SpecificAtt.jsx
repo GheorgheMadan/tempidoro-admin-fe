@@ -1,13 +1,13 @@
 import "../../css/addProductStyle.css";
 import InputProductDetail from "../InputProductDetail";
 
-export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched, errors, showError, isOpen, handleOpen, handleToggle, table, filteredDataTable, setOpenMenu }) {
+export default function SpecificAtt({ productToAdd, setProductToAdd, isOpen, handleOpen, handleToggle, table, filteredDataTable, setOpenMenu }) {
     return (
         <>
             {/* Attributi specifici per gli occhiali */}
-            {(productToAdd.categoria === "Occhiali da sole" ||
-                productToAdd.categoria === "Montature da vista" ||
-                productToAdd.categoria === "Outlet") && (
+            {(productToAdd?.categoria === "Occhiali da sole" ||
+                productToAdd?.categoria === "Montature da vista" ||
+                productToAdd?.categoria === "Outlet") && (
                     <InputProductDetail
                         productToAdd={productToAdd}
                         setProductToAdd={setProductToAdd}
@@ -22,7 +22,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                         changeInput={(e) =>
                             setProductToAdd({ ...productToAdd, tipo_lenti: e.target.value })
                         }
-                        inputValue={productToAdd.tipo_lenti}
+                        inputValue={productToAdd?.tipo_lenti}
                         handleClick={(item) =>
                             setProductToAdd({ ...productToAdd, tipo_lenti: item.name })
                         }
@@ -33,9 +33,9 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                 )}
 
             {/* Attributi specifici per CINTURINI e OROLOGI */}
-            {(productToAdd.categoria === "Cinturini" ||
-                productToAdd.categoria === "Orologi" ||
-                productToAdd.categoria === "Outlet") && (
+            {(productToAdd?.categoria === "Cinturini" ||
+                productToAdd?.categoria === "Orologi" ||
+                productToAdd?.categoria === "Outlet") && (
                     <div className="ap-section">
                         <InputProductDetail
                             productToAdd={productToAdd}
@@ -58,7 +58,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                                     tipologia_cinturino: e.target.value,
                                 })
                             }
-                            inputValue={productToAdd.tipologia_cinturino}
+                            inputValue={productToAdd?.tipologia_cinturino}
                             handleClick={(item) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -91,7 +91,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                                     materiale_cinturino: e.target.value,
                                 })
                             }
-                            inputValue={productToAdd.materiale_cinturino}
+                            inputValue={productToAdd?.materiale_cinturino}
                             handleClick={(item) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -106,8 +106,8 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                 )}
 
             {/* ATTRIBUTI SPECIFICI SOLO PER CINTURINI */}
-            {(productToAdd.categoria === "Cinturini" ||
-                productToAdd.categoria === "Outlet") && (
+            {(productToAdd?.categoria === "Cinturini" ||
+                productToAdd?.categoria === "Outlet") && (
                     <InputProductDetail
                         productToAdd={productToAdd}
                         setProductToAdd={setProductToAdd}
@@ -122,7 +122,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                         changeInput={(e) =>
                             setProductToAdd({ ...productToAdd, misura_ansa: e.target.value })
                         }
-                        inputValue={productToAdd.misura_ansa}
+                        inputValue={productToAdd?.misura_ansa}
                         handleClick={(item) =>
                             setProductToAdd({ ...productToAdd, misura_ansa: item.name })
                         }
@@ -133,8 +133,8 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                 )}
 
             {/* ATTRIBUTI SPECIFICI SOLO PER OROLOGI */}
-            {(productToAdd.categoria === "Orologi" ||
-                productToAdd.categoria === "Outlet") && (
+            {(productToAdd?.categoria === "Orologi" ||
+                productToAdd?.categoria === "Outlet") && (
                     <div className="ap-section">
                         <InputProductDetail
                             productToAdd={productToAdd}
@@ -157,7 +157,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                                     materiale_cassa: e.target.value,
                                 })
                             }
-                            inputValue={productToAdd.materiale_cassa}
+                            inputValue={productToAdd?.materiale_cassa}
                             handleClick={(item) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -190,7 +190,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                                     tipologia_movimento: e.target.value,
                                 })
                             }
-                            inputValue={productToAdd.tipologia_movimento}
+                            inputValue={productToAdd?.tipologia_movimento}
                             handleClick={(item) =>
                                 setProductToAdd({
                                     ...productToAdd,
@@ -205,15 +205,15 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                 )}
 
             {/* ATTRIBUTI SPECIFICI ORECCHINI, ANELLI, CIONDOLI, PORTACHIAVI, COLLANE, BRACCIALI, CAVIGLIERE, PREZIOSI */}
-            {(productToAdd.categoria === "Orecchini" ||
-                productToAdd.categoria === "Ciondoli" ||
-                productToAdd.categoria === "Portachiavi" ||
-                productToAdd.categoria === "Collane" ||
-                productToAdd.categoria === "Bracciali" ||
-                productToAdd.categoria === "Preziosi" ||
-                productToAdd.categoria === "Cavigliere" ||
-                productToAdd.categoria === "Anelli" ||
-                productToAdd.categoria === "Outlet") && (
+            {(productToAdd?.categoria === "Orecchini" ||
+                productToAdd?.categoria === "Ciondoli" ||
+                productToAdd?.categoria === "Portachiavi" ||
+                productToAdd?.categoria === "Collane" ||
+                productToAdd?.categoria === "Bracciali" ||
+                productToAdd?.categoria === "Preziosi" ||
+                productToAdd?.categoria === "Cavigliere" ||
+                productToAdd?.categoria === "Anelli" ||
+                productToAdd?.categoria === "Outlet") && (
                     <InputProductDetail
                         productToAdd={productToAdd}
                         setProductToAdd={setProductToAdd}
@@ -228,7 +228,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                         changeInput={(e) =>
                             setProductToAdd({ ...productToAdd, pietre: e.target.value })
                         }
-                        inputValue={productToAdd.pietre}
+                        inputValue={productToAdd?.pietre}
                         handleClick={(item) =>
                             setProductToAdd({ ...productToAdd, pietre: item.name })
                         }
@@ -239,8 +239,8 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                 )}
 
             {/* ATTRIBUTI SPECIFICI SOLO PER PREZIOSI */}
-            {(productToAdd.categoria === "Preziosi" ||
-                productToAdd.categoria === "Outlet") && (
+            {(productToAdd?.categoria === "Preziosi" ||
+                productToAdd?.categoria === "Outlet") && (
                     <InputProductDetail
                         productToAdd={productToAdd}
                         setProductToAdd={setProductToAdd}
@@ -262,7 +262,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                                 modello_gioielleria: e.target.value,
                             })
                         }
-                        inputValue={productToAdd.modello_gioielleria}
+                        inputValue={productToAdd?.modello_gioielleria}
                         handleClick={(item) =>
                             setProductToAdd({
                                 ...productToAdd,
@@ -276,8 +276,8 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                 )}
 
             {/* ATTRIBUTI SPECIFICI SOLO PER ANELLI */}
-            {(productToAdd.categoria === "Anelli" ||
-                productToAdd.categoria === "Outlet") && (
+            {(productToAdd?.categoria === "Anelli" ||
+                productToAdd?.categoria === "Outlet") && (
                     <InputProductDetail
                         productToAdd={productToAdd}
                         setProductToAdd={setProductToAdd}
@@ -292,7 +292,7 @@ export default function SpecificAtt({ productToAdd, setProductToAdd, markTouched
                         changeInput={(e) =>
                             setProductToAdd({ ...productToAdd, misura_anello: e.target.value })
                         }
-                        inputValue={productToAdd.misura_anello}
+                        inputValue={productToAdd?.misura_anello}
                         handleClick={(item) =>
                             setProductToAdd({ ...productToAdd, misura_anello: item.name })
                         }

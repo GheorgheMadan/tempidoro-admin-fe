@@ -52,6 +52,65 @@
     fill: red;
 }
 
+/* sezione prodotto incollato */
+/* --- Sezione "Prodotto copiato" --- */
+.section-copied-product {
+    background: #e9fdea;
+    /* resta il verde tenue */
+    border: 1px solid #c9f5cb;
+    /* bordo coerente con il bg */
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    /* niente padding mostruosi */
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+/* Contenitore bottoni */
+.copied-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* va a capo su mobile */
+    gap: 10px;
+    justify-content: flex-start;
+    /* allineo a sx (più naturale in form) */
+    margin-bottom: 10px;
+    /* separo dai contenuti sotto */
+}
+
+/* Stile dei due bottoni (riuso la tua classe esistente) */
+.copied-buttons-container button {
+    border: 1px solid var(--b2);
+    background: #fff;
+    color: var(--txt);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 750;
+    letter-spacing: .3px;
+    cursor: pointer;
+    transition: background .14s ease, box-shadow .14s ease, filter .14s ease;
+    min-width: 140px;
+}
+
+/* Primo bottone: "Incolla" -> primario */
+.copied-buttons-container button:first-child {
+    background: linear-gradient(180deg, var(--accent2), var(--accent));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 8px 18px rgba(255, 138, 0, .20);
+}
+
+.copied-buttons-container button:first-child:hover {
+    filter: brightness(.98);
+}
+
+/* Secondo bottone: "Svuota" outline soft */
+.copied-buttons-container button:last-child:hover {
+    background: #f6f6f6;
+}
+
 /* =========================================================
    Card / griglia superiore
 ========================================================= */
@@ -82,7 +141,6 @@
     padding-right: 0;
 }
 
-/* niente “taglio” verticale */
 .m-bottom {
     margin-bottom: 16px;
 }
@@ -417,6 +475,12 @@ textarea:disabled {
     border-color: #ececec;
     cursor: not-allowed;
     box-shadow: none;
+}
+
+.img-form {
+    max-height: 100px;
+    max-width: 100px;
+    margin-right: 10px;
 }
 
 /* =========================================================

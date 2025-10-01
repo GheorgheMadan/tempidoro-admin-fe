@@ -94,7 +94,7 @@
     line-height: 22px;
 }
 
-.card-content button {
+.btn-skin-1-btn-xs {
     padding: 7px 20px;
     border: none;
     border-radius: 10px;
@@ -103,7 +103,7 @@
     background-color: #e9fdea;
 }
 
-.card-content button:hover {
+.btn-skin-1-btn-xs:hover {
     background-color: #333;
     color: white;
 }
@@ -287,4 +287,9 @@
 
 .products-section a {
     text-decoration: none;
+}
+
+.container-button {
+    display: flex;
+    gap: 10px;
 }

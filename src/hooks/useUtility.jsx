@@ -32,5 +32,14 @@ export default function useUtility() {
         return `${base}.${ext}`;
     };
 
-    return { slugifyUnderscore, getFileExtension, buildImageFileNameWithExt }
+    const compact = (obj) => {
+        const out = {};
+        for (const [k, v] of Object.entries(obj)) {
+            if (v === "" || v === null || v === undefined) continue; // 0/false restano
+            out[k] = typeof v === "string" ? v.trim() : v;
+        }
+        return out;
+    };
+
+    return { slugifyUnderscore, getFileExtension, buildImageFileNameWithExt, compact }
 }
