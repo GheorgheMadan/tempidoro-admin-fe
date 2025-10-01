@@ -1,6 +1,6 @@
 .container-products {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 }
 
@@ -268,7 +268,6 @@
 
 .container-active-filters.activ {
     max-height: 500px;
-    /* abbastanza grande da contenere tutti */
     opacity: 1;
     transform: translateY(0);
 }
@@ -289,7 +288,16 @@
     text-decoration: none;
 }
 
+/* contenitore button elimina copia e modifica */
 .container-button {
     display: flex;
-    gap: 10px;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.btn-disabled {
+    pointer-events: none;
+    background-color: #333;
+    color: white;
+    opacity: 0.6;
 }

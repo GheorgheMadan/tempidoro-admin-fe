@@ -7,12 +7,13 @@ import { MdFilterList } from "react-icons/md";
 import { IoIosSearch } from "react-icons/io";
 import Filters from '../components/Filters';
 import ActiveFilters from '../components/ActiveFilters';
+import ConfirmModal from '../components/ConfirmModal';
 
 export default function HomePage() {
 
     const { products, total, offset, limit, fetchProducts, loading,
         loadingMore, searching, setOffset, filters, setFilters, resetAll, handleFilter,
-        getCategoryFilterList, categoryFilterList, categoriesList } = useGlobalProducts();
+        getCategoryFilterList, categoryFilterList, categoriesList, response, deleteMultipleProducts } = useGlobalProducts();
 
     const [showFilter, setShowFilter] = useState(false)
     const filterDropDownRef = useRef()
@@ -25,6 +26,10 @@ export default function HomePage() {
         const storedCategory = sessionStorage.getItem('categoria');
         return storedCategory ? storedCategory : '';
     })
+
+    // Stato per i prodotti selezionati per l'eliminazione multipla
+    const [selectedProducts, setSelectedProducts] = useState([])
+    const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
 
     useEffect(() => {
         sessionStorage.setItem('categoria', category);
@@ -76,6 +81,20 @@ export default function HomePage() {
         });
     }, [searchQuery, filters, category]);
 
+    useEffect(() => {
+        if (!category) return;
+        if (!response?.success) return;
+
+        (async () => {
+            // ricarico i filtri dal backend
+            await getCategoryFilterList(category);
+        })();
+
+        // opzionale: resetti la response dopo aver gestito i filtri
+        // setResponse(null);
+
+    }, [response?.success, category]);
+
     // Funzione per caricare altri prodotti
     const handleLoadMore = () => {
         const newOffset = offset + limit;
@@ -113,13 +132,28 @@ export default function HomePage() {
     // verifico se si è ce qualche filtro attivo
     const isActive = Object.values(filters).some(value => value !== "");
 
+    // handler per l'eliminazione multipla
+    const toggleSelectProduct = (productId) => {
+        setSelectedProducts(prevSelected => prevSelected.includes(productId) ? prevSelected.filter(id => id !== productId) : [...prevSelected, productId]);
+    }
+
+    const handleDeleteSelected = async () => {
+        if (selectedProducts.length === 0) return;
+        await deleteMultipleProducts(selectedProducts);
+        setSelectedProducts([]);
+    }
+
+    console.log("id dei prodotti selezionati", selectedProducts);
+
 
     return (
         <main className="category-page">
             <div className='container-title'>
+                {/* CATEGORIA DELLA PAGINA */}
                 <h1 className="text-center">{category}</h1>
-                {/* Sezione ricerca */}
+                {/* SEZIONE RICERCA */}
                 <div>
+                    {/* SELEZIONE CATEGORIA PER IL FETCH DEI PRODOTTI */}
                     <label>Seleziona la categoria: </label>
                     <select onChange={e => setCategory(e.target.value)} className='input' value={category}>
                         <option value="">-- seleziona --</option>
@@ -127,10 +161,12 @@ export default function HomePage() {
                     </select>
                 </div>
             </div>
+            {/* SEZIONE SEARCH BAR E FILTERS */}
             <div className='container-search'>
+                {/* ICONA DEI FILTRI */}
                 <MdFilterList className='filter-icon' onClick={() => setShowFilter(true)} />
+                {/* SEARCH BAR */}
                 <div className='search-input'>
-
                     <input
                         className='input'
                         type="text"
@@ -141,6 +177,7 @@ export default function HomePage() {
                         value={searchInput}
                         placeholder='Cerca...'
                     />
+                    {/* SVUOTA INPUT */}
                     {searchInput.length > 0 && < span
                         className='cancel-input'
                         onClick={() => {
@@ -150,7 +187,9 @@ export default function HomePage() {
                         ✕
                     </span>}
                 </div>
+                {/* SEARCH ICON */}
                 <IoIosSearch className='search-icon' />
+                {/* FILTRI */}
                 <Filters
                     filtersName={categoryFilterList.filters}
                     category={category}
@@ -172,23 +211,64 @@ export default function HomePage() {
                 // searchQuery={searchQuery}
                 />
             </div>
-
+            {/* TOTALE ARTICOLI */}
             <h4>{total} articoli</h4>
+            {/* BUTTON ELIMINAZIONE MULTIPLA */}
+            <div>
+                <button
+                    className={`btn-skin-1-btn-xs btn`}
+                    onClick={() => setConfirmDeleteModal(true)} disabled={selectedProducts.length === 0}
+                >
+                    Elimina selezionati ({selectedProducts.length})
+                </button>
+                <button
+                    onClick={() => setSelectedProducts([])}
+                    className={`btn-skin-1-btn-xs btn`}
+                    disabled={selectedProducts.length === 0}
+                >
+                    Deseleziona tutto
+                </button>
+                <button
+                    className={`btn-skin-1-btn-xs btn`}
+                    onClick={() => {
+                        const allIds = products.map(p => p.id);
+                        setSelectedProducts(allIds);
+                    }}
+                >
+                    Seleziona tutto
+                </button>
+                <ConfirmModal
+                    show={confirmDeleteModal}
+                    onClose={() => setConfirmDeleteModal(false)}
+                    onConfirm={async () => {
+                        await handleDeleteSelected();
+                        setConfirmDeleteModal(false);
+                    }}
+                    modalTitle="Confermi l'eliminazione?"
+                    message={`Sei sicuro di voler eliminare i ${selectedProducts.length} prodotti selezionati? Non potrai più tornare indietro.`}
+                />
+            </div>
+            {/* FILTRI ATTIVI */}
             <div className={`container-active-filters ${isActive ? "activ" : ""}`}>
                 <ActiveFilters filters={filters} setFilters={setFilters} />
             </div>
+            {/* LOADING */}
             {loading && searching && <Spinner />}
             {
                 noResults && (
                     <h2 className='text-center'>Nessun prodotto trovato</h2>
                 )
             }
+            {/* LISTA PRODOTTI */}
             <div className="container-products">
                 {
                     products.map(product => (
                         <ProductCard
                             key={product.id}
                             product={product}
+                            containerButton={true}
+                            checked={selectedProducts.includes(product.id)}
+                            onToggleSelect={toggleSelectProduct}
                         />
                     ))}
             </div>

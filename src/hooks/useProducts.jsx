@@ -1,4 +1,5 @@
 
+import { set } from "lodash";
 import { useState } from "react";
 
 export default function useProducts() {
@@ -171,16 +172,7 @@ export default function useProducts() {
         }
     }
 
-    const deslugyfyCategory = (slug) => {
-        if (!slug) return '';
-
-        return slug
-            .replace(/[-_]/g, ' ') // sostituisce trattini o underscore con spazi
-            .split(' ')            // divide in parole
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // mette la maiuscola
-            .join(' ');
-    };
-
+    // reset filtri
     const resetAll = () => {
         setFilters({
             order: '',
@@ -209,15 +201,17 @@ export default function useProducts() {
         })
     };
 
+    // gestione filtri
     const handleFilter = (e) => {
         const { value, name } = e.target
         setFilters(prev => ({ ...prev, [name]: value }));
     }
 
-
+    // aggiungi prodotto
     async function addProduct(productToAdd) {
         try {
             setLoading(true)
+            setResponse(null)
             const res = await fetch(`http://localhost:3000/api/products/addProduct`, {
                 method: "POST",
                 headers: {
@@ -226,7 +220,15 @@ export default function useProducts() {
                 body: JSON.stringify(productToAdd),
             })
             const message = await res.json()
-            setResponse(message)
+
+            if (!res.ok) {
+                setResponse({
+                    success: false,
+                    ...message
+                })
+                return
+            }
+            setResponse({ ...message, success: true })
         } catch (err) {
             console.error(err);
             setResponse({
@@ -238,9 +240,11 @@ export default function useProducts() {
         }
     }
 
+    // modifica prodotto
     async function modifyProduct(id, modifiedProduct) {
         try {
             setLoading(true);
+            setResponse(null);
             const res = await fetch(`http://localhost:3000/api/products/modifyProduct/${id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -252,6 +256,7 @@ export default function useProducts() {
             if (!res.ok) {
                 // server error/404/validazione: data = { message, modifiedProduct: null, errors? }
                 setResponse({
+                    success: false,
                     message: data?.message || "Errore durante l'aggiornamento",
                     modifiedProduct: null,
                     errors: data?.errors || undefined,
@@ -260,15 +265,84 @@ export default function useProducts() {
             }
 
             // successo: data = { message, modifiedProduct }
-            setResponse(data);
+            setResponse({ ...data, success: true });
             return data; // così puoi usarlo per aggiornare la UI locale
         } catch (err) {
             console.error(err);
             setResponse({
                 message: "Impossibile contattare il server, riprova più tardi.",
                 modifiedProduct: null,
+                success: false,
             });
             return null;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // elimina prodotto
+    async function deleteProduct(id) {
+        try {
+            setLoading(true);
+            setResponse(null);
+            const res = await fetch(`http://localhost:3000/api/products/deleteProduct/${id}`, {
+                method: "DELETE",
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                setResponse(data);
+                return;
+            }
+            setResponse(data);
+            // Rimuovi il prodotto eliminato dalla lista locale
+            setProducts(prevProducts => prevProducts.filter(prod => prod.id !== id));
+            setTotal(prev => Math.max(0, prev - 1));
+        } catch (err) {
+            console.error(err);
+            setResponse({
+                success: false,
+                message: "Impossibile contattare il server, riprova più tardi.",
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function deleteMultipleProducts(ids) {
+        try {
+            setLoading(true);
+            setResponse(null);
+
+            const arrURLS = ids.map(id =>
+                `http://localhost:3000/api/products/deleteProduct/${id}`
+            );
+
+            const deletePromises = arrURLS.map(url =>
+                fetch(url, { method: "DELETE" }).then(res => {
+                    if (!res.ok) throw new Error(`Failed to delete product with URL: ${url}`);
+                    return res.json();
+                })
+            );
+
+            // Tutte devono andare a buon fine, altrimenti va in catch
+            const results = await Promise.all(deletePromises);
+
+            setResponse({
+                success: true,
+                message: `Eliminati ${results.length} prodotti con successo.`
+            });
+
+            // Aggiorna lo stato locale solo se tutti eliminati
+            setProducts(prevProducts => prevProducts.filter(prod => !ids.includes(prod.id)));
+            setTotal(prev => Math.max(0, prev - results.length));
+
+        } catch (err) {
+            console.error(err);
+            setResponse({
+                success: false,
+                message: "Errore: non tutti i prodotti sono stati eliminati. Operazione annullata."
+            });
         } finally {
             setLoading(false);
         }
@@ -289,7 +363,6 @@ export default function useProducts() {
         setLimit,
         fetchProducts,
         fetchProductById,
-        deslugyfyCategory,
         filters,
         setFilters,
         resetAll,
@@ -297,6 +370,8 @@ export default function useProducts() {
         response,
         setResponse,
         addProduct,
-        modifyProduct
+        modifyProduct,
+        deleteProduct,
+        deleteMultipleProducts
     };
 }

@@ -41,5 +41,43 @@ export default function useUtility() {
         return out;
     };
 
-    return { slugifyUnderscore, getFileExtension, buildImageFileNameWithExt, compact }
+    const deslugyfyCategory = (slug) => {
+        if (!slug) return '';
+
+        return slug
+            .replace(/[-_]/g, ' ') // sostituisce trattini o underscore con spazi
+            .split(' ')            // divide in parole
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // mette la maiuscola
+            .join(' ');
+    };
+
+    // Funzione per trasformare un titolo in uno slug leggibile
+    function slugify(title) {
+        return title
+            .toLowerCase()                  // tutto minuscolo
+            .replace(/[^a-z0-9\s-]/g, '')   // rimuove caratteri speciali
+            .replace(/\s+/g, '-')           // sostituisce spazi con trattini
+            .replace(/-+/g, '-');           // rimuove trattini ripetuti
+    }
+
+    function capitalizeFirst(str) {
+        if (!str) return "";
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function smartCapitalizeWords(str) {
+        if (!str || typeof str !== "string") return "";
+
+        return str
+            .split(" ")
+            .map(word => {
+                // se la parola è tutta maiuscola, la lascio invariata
+                if (word === word.toUpperCase()) return word;
+                // altrimenti capitalizzo solo la prima lettera
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            })
+            .join(" ");
+    }
+
+    return { slugifyUnderscore, getFileExtension, buildImageFileNameWithExt, compact, deslugyfyCategory, slugify, capitalizeFirst, smartCapitalizeWords }
 }

@@ -99,6 +99,44 @@ nav {
     color: red;
 }
 
+.btn {
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: filter .14s ease, transform .06s ease, box-shadow .14s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, var(--accent2), var(--accent));
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(255, 138, 0, .20);
+}
+
+.red-btn {
+    background: red;
+    color: white;
+    box-shadow: 0 8px 18px rgba(255, 69, 58, .20);
+}
+
+.btn-primary:hover {
+    filter: brightness(.98);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:disabled {
+    background: #ececec;
+    color: #a6a6a6;
+    border-color: #ececec;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 /* ==========================================================================
    6) SPINNER LOADING
    ========================================================================== */

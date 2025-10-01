@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import "../css/ModalStyle.css"
 
-export default function ConfirmModal({ show, onClose, onConfirm, modalTitle }) {
+export default function ConfirmModal({ show, onClose, onConfirm, modalTitle, message }) {
     // se show è false → non mostrare nulla
     if (!show) return null;
 
@@ -9,6 +9,7 @@ export default function ConfirmModal({ show, onClose, onConfirm, modalTitle }) {
         <div className="modal-overlay">
             <div className="modal">
                 <h2>{modalTitle}</h2>
+                <p>{message}</p>
                 <div className="modal-actions">
                     <button className="btn btn-secondary" onClick={onClose}>
                         Annulla

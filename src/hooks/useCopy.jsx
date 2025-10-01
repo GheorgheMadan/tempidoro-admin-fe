@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 export default function useCopy() {
 
     const [copiedProduct, setCopiedProduct] = useState(() => {
-        const storedCopiedProduct = localStorage.getItem('copiedProduct');
+        const storedCopiedProduct = sessionStorage.getItem('copiedProduct');
         return storedCopiedProduct ? JSON.parse(storedCopiedProduct) : null;
     });
 
 
     useEffect(() => {
-        localStorage.setItem('copiedProduct', JSON.stringify(copiedProduct));
+        sessionStorage.setItem('copiedProduct', JSON.stringify(copiedProduct));
     }, [copiedProduct]);
 
     function normalizeCopiedProduct(copied) {

@@ -4,6 +4,7 @@ import "../css/addProductStyle.css";
 import useUtility from "../hooks/useUtility";
 import ConfirmModal from "../components/ConfirmModal";
 import AllertModal from "../components/AllertModal";
+import { useNavigate } from "react-router-dom";
 
 // import vari componenti del form
 import BaseForm from "../components/formComponents/BaseForm";
@@ -11,7 +12,7 @@ import LogisticForm from "../components/formComponents/LogisticForm";
 import GeneralAtt from "../components/formComponents/GeneralAtt";
 import SpecificAtt from "../components/formComponents/SpecificAtt";
 
-export default function ProductForm({ textTitle, copiedProductSection, setProductToAdd, productToAdd, categoriesList, mode, fetch, navigate }) {
+export default function ProductForm({ annullaEditButton, textTitle, copiedProductSection, setProductToAdd, productToAdd, categoriesList, mode, fetch, clearFormButton }) {
 
     const [openModal, setOpenModal] = useState(false)
     const [allertModal, setAllertModal] = useState(false)
@@ -25,7 +26,7 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
     const isEdit = mode === "Edit";
 
     // IMPORTO LA FUNZIONE CHE GESTIRA' IL NOME DELL'IMMAGINE
-    const { buildImageFileNameWithExt, compact } = useUtility();
+    const { buildImageFileNameWithExt, compact, slugify, capitalizeFirst, smartCapitalizeWords } = useUtility();
 
     // stato per dropdown brand
     const [openMenu, setOpenMenu] = useState(null);
@@ -149,9 +150,9 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
 
         // base comune
         const baseProduct = {
-            categoria: productToAdd.categoria,
-            brand: productToAdd.brand,
-            title: productToAdd.title,
+            categoria: capitalizeFirst(productToAdd.categoria),
+            brand: capitalizeFirst(productToAdd.brand || "Senza marca"),
+            title: smartCapitalizeWords(productToAdd.title),
             codice: productToAdd.codice,
             // tipizza i numeri
             price: Number(productToAdd.price),
@@ -166,14 +167,14 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
             codice_ean: productToAdd.codice_ean,
             image: productToAdd.image,
             // attributi generali
-            materiale: productToAdd.materiale,
-            colore: productToAdd.colore,
-            finitura: productToAdd.finitura,
-            tipologia: productToAdd.tipologia,
-            collezione: productToAdd.collezione,
-            genere: productToAdd.genere,
-            confezione: productToAdd.confezione,
-            garanzia: productToAdd.garanzia,
+            materiale: capitalizeFirst(productToAdd.materiale),
+            colore: capitalizeFirst(productToAdd.colore),
+            finitura: capitalizeFirst(productToAdd.finitura),
+            tipologia: capitalizeFirst(productToAdd.tipologia),
+            collezione: capitalizeFirst(productToAdd.collezione),
+            genere: capitalizeFirst(productToAdd.genere),
+            confezione: capitalizeFirst(productToAdd.confezione),
+            garanzia: capitalizeFirst(productToAdd.garanzia),
             codice_produttore: productToAdd.codice_produttore,
         };
 
@@ -189,17 +190,17 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
         } else if (cat === "Cinturini") {
             finalProduct = {
                 ...baseProduct,
-                tipologia_cinturino: productToAdd.tipologia_cinturino,
-                materiale_cinturino: productToAdd.materiale_cinturino,
-                misura_ansa: productToAdd.misura_ansa,
+                tipologia_cinturino: capitalizeFirst(productToAdd.tipologia_cinturino),
+                materiale_cinturino: capitalizeFirst(productToAdd.materiale_cinturino),
+                misura_ansa: capitalizeFirst(productToAdd.misura_ansa),
             };
         } else if (cat === "Orologi") {
             finalProduct = {
                 ...baseProduct,
-                tipologia_cinturino: productToAdd.tipologia_cinturino,
-                materiale_cinturino: productToAdd.materiale_cinturino,
-                materiale_cassa: productToAdd.materiale_cassa,
-                tipologia_movimento: productToAdd.tipologia_movimento,
+                tipologia_cinturino: capitalizeFirst(productToAdd.tipologia_cinturino),
+                materiale_cinturino: capitalizeFirst(productToAdd.materiale_cinturino),
+                materiale_cassa: capitalizeFirst(productToAdd.materiale_cassa),
+                tipologia_movimento: capitalizeFirst(productToAdd.tipologia_movimento),
             };
         } else if (
             cat === "Orecchini" ||
@@ -211,9 +212,9 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
         ) {
             finalProduct = baseGioielleria;
         } else if (cat === "Anelli") {
-            finalProduct = { ...baseGioielleria, misura_anello: productToAdd.misura_anello };
+            finalProduct = { ...baseGioielleria, misura_anello: capitalizeFirst(productToAdd.misura_anello) };
         } else if (cat === "Preziosi") {
-            finalProduct = { ...baseGioielleria, modello_gioielleria: productToAdd.modello_gioielleria };
+            finalProduct = { ...baseGioielleria, modello_gioielleria: capitalizeFirst(productToAdd.modello_gioielleria) };
         } else if (cat === "Sveglie" || cat === "Orologi da parete") {
             finalProduct = baseProduct;
         } else {
@@ -223,8 +224,6 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
 
         // pulizia finale: niente stringhe vuote, niente null/undefined
         finalProduct = compact(finalProduct);
-
-        console.log("prodotto finale", finalProduct);
 
         if (isEdit) {
             await fetch(productToAdd.id, finalProduct);
@@ -236,10 +235,18 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
         return true;
     };
 
+    // genero lo slug per la navigazione dopo il submit
+    const slug = slugify(productToAdd?.title);
+
+    const navigate = useNavigate()
+
+    console.log(response);
+
     return (
         <>
             <h1 className="form-title">{textTitle}</h1>
             {copiedProductSection}
+            {clearFormButton}
             <form className="ap-form">
                 <div className="add-product-form-container ap-grid-2 ap-section">
                     {/* *********************************************************************** */}
@@ -315,6 +322,7 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
 
                 {/* azioni */}
                 <div className="actions ap-section">
+                    {annullaEditButton}
                     <button
                         type="submit"
                         disabled={!productToAdd?.categoria}
@@ -333,8 +341,8 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
                 <ConfirmModal
                     show={openModal}
                     onClose={() => setOpenModal(false)}
-                    onConfirm={() => {
-                        handleSubmit()
+                    onConfirm={async () => {
+                        await handleSubmit()
                         setOpenModal(false)
                         setAllertModal(true)
                     }}
@@ -343,16 +351,17 @@ export default function ProductForm({ textTitle, copiedProductSection, setProduc
                 <AllertModal
                     show={allertModal}
                     onConfirm={() => {
-                        setResponse(null)
-                        setAllertModal(false)
-                        navigate(`/product/${productToAdd.id}`)
+                        const id = mode === "Edit" ? productToAdd?.id : response?.productId;
+                        if (response?.success) {
+                            navigate(`/product/${slug}-${id}`);
+                        }
                         if (mode === "Edit") {
                             setProductToAdd(null)
                         }
+                        setAllertModal(false)
                     }}
                     text={response?.message}
                     errors={alertErrors}
-
                 />
             </form>
         </>

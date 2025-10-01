@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import "../css/ProductDetail.css";
 import AddToFavButton from "../components/AddToFavButton";
 import OverlayImage from "../components/OverlayImage";
+import Spinner from "../components/Spinner";
 
 export default function ProductDetail() {
 
-    const { fetchProductById, product, deslugyfyCategory } = useGlobalProducts();
+    const { fetchProductById, product, loading } = useGlobalProducts();
 
     const { slugAndId } = useParams(); // Ottieni l'ID del prodotto dalla URL
 
@@ -16,14 +17,25 @@ export default function ProductDetail() {
     // Estrai l'id numerico dalla parte finale della stringa
     const id = slugAndId.split("-").pop();
 
+
+
     useEffect(() => {
         (async () => {
             await fetchProductById(id); // Fetch del prodotto specifico
         })()
     }, [id])
-    if (!product) {
-        return <p>Caricamento prodotto...</p>;
+
+    if (loading) {
+        return <Spinner />
     }
+
+    if (!product) {
+        return <p>Errore del server. Riprova più tardi.</p>;
+    }
+    if (Object.keys(product).length === 0) {
+        return <p>Prodotto non trovato.</p>;
+    }
+
 
     // calocolo prezzo scontato 
     const discount = `0.${product.discount}`
@@ -54,12 +66,12 @@ export default function ProductDetail() {
                             )}
                             <ul>
                                 {/* 1. Categoria */}
-                                {product?.categoria_nome && (
-                                    <li>Categoria: {deslugyfyCategory(product.categoria_nome)}</li>
+                                {product?.categoria && (
+                                    <li>Categoria: {product.categoria}</li>
                                 )}
                                 {/* 2. Marca */}
-                                {product?.marca_nome && (
-                                    <li>Marca: {product.marca_nome}</li>
+                                {product?.brand && (
+                                    <li>Marca: {product.brand}</li>
                                 )}
                                 {/* 3. Codice */}
                                 {product?.codice && (
